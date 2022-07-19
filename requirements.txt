@@ -1,0 +1,8 @@
+pytesseract>=0.3.9
+pyclip>=0.6.0
+gradio>=3.0.18
+nltk>=3.7
+sentencepiece>=0.1.96
+transformers>=4.20.0
+sacremoses>=0.0.53
+torch>=1.11.0
