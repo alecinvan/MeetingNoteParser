@@ -114,7 +114,7 @@ def main():
         with gr.Box():
 
             with gr.Row():
-                gr.Markdown("### Step 01: Text extraction")
+                gr.Markdown("### Step 01: Text Extraction")
 
             with gr.Row():
                 with gr.Column():
@@ -128,7 +128,7 @@ def main():
 
                     with gr.Row():
                         clear_img_btn = gr.Button('Clear')
-                        ocr_btn = gr.Button(value='OCR extraction', variant="primary")
+                        ocr_btn = gr.Button(value='OCR Extraction', variant="primary")
 
                 with gr.Column():
                     with gr.Row():
@@ -140,7 +140,7 @@ def main():
                                                      label='translation mode')
                     with gr.Row():
                         clear_text_btn = gr.Button('Clear')
-                        translate_btn = gr.Button(value='translate', variant="primary")
+                        translate_btn = gr.Button(value='Translate', variant="primary")
 
             with gr.Row():
                 example_list = [["./data/test.png", ["eng"]], ["./data/test02.png", ["eng"]],
@@ -154,11 +154,11 @@ def main():
                 gr.Markdown("### Step 02: Translation")
 
             with gr.Row():
-                outputs_tr_text = gr.Textbox(label="translate content", lines=20)
+                outputs_tr_text = gr.Textbox(label="Translate Content", lines=20)
 
             with gr.Row():
-                cp_clear_btn = gr.Button(value='clear clipboard')
-                cp_btn = gr.Button(value='copy to clipboard', variant="primary")
+                cp_clear_btn = gr.Button(value='Clear Clipboard')
+                cp_btn = gr.Button(value='Copy to clipboard', variant="primary")
 
         # ---------------------- OCR Tesseract ----------------------
         ocr_btn.click(fn=ocr_tesseract, inputs=[inputs_img, inputs_lang], outputs=[
