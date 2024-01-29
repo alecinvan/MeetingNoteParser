@@ -237,7 +237,7 @@ def main():
         cp_btn.click(fn=cp_text, inputs=[outputs_tr_text], outputs=[])
         cp_clear_btn.click(fn=cp_clear, inputs=[], outputs=[])
 
-    ocr_tr.launch(inbrowser=True, share=True)
+    ocr_tr.launch(inbrowser=True)
 
 
 if __name__ == '__main__':
