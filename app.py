@@ -1,10 +1,12 @@
-# OCR Translate v0.2
-# 创建人：曾逸夫
-# 创建时间：2022-07-19
+# AI Meeting note parser
+# Author：Alec Li
+# Date：2024-01-26
+# Location: Richmond Hospital Canada
 
 import os
 
 os.system("sudo apt-get install xclip")
+
 
 import gradio as gr
 import nltk
@@ -12,32 +14,51 @@ import pyclip
 import pytesseract
 from nltk.tokenize import sent_tokenize
 from transformers import MarianMTModel, MarianTokenizer
+import openai
+
 
 nltk.download('punkt')
 
-OCR_TR_DESCRIPTION = '''# OCR Translate v0.2
-<div id="content_align">OCR translation system based on Tesseract</div>'''
 
-# 图片路径
+OCR_TR_DESCRIPTION = '''
+<div id="content_align">
+  <span style="color:darkred;font-size:32px;font-weight:bold">  
+    模多多会议记录总结神器 
+  </span>
+</div>
+
+<div id="content_align">
+  <span style="color:blue;font-size:16px;font-weight:bold">  
+  会议记录拍照 -> 转文字 -> 翻译 -> 提炼会议纪要 -> 识别待办事项 -> 分配任务
+</div>
+
+<div id="content_align" style="margin-top: 10px;">
+  作者: Dr.  Alec Li
+</div>
+'''
+
+
+# Image path
 img_dir = "./data"
 
-# 获取tesseract语言列表
+# Get tesseract language list
 choices = os.popen('tesseract --list-langs').read().split('\n')[1:-1]
 
 
-# 翻译模型选择
+
+# Translation model selection
 def model_choice(src="en", trg="zh"):
     # https://huggingface.co/Helsinki-NLP/opus-mt-zh-en
     # https://huggingface.co/Helsinki-NLP/opus-mt-en-zh
-    model_name = f"Helsinki-NLP/opus-mt-{src}-{trg}"  # 模型名称
+    model_name = f"Helsinki-NLP/opus-mt-{src}-{trg}"  # Model name
 
-    tokenizer = MarianTokenizer.from_pretrained(model_name)  # 分词器
-    model = MarianMTModel.from_pretrained(model_name)  # 模型
+    tokenizer = MarianTokenizer.from_pretrained(model_name)  # Tokenizer
+    model = MarianMTModel.from_pretrained(model_name)  # model
 
     return tokenizer, model
 
 
-# tesseract语言列表转pytesseract语言
+# Convert tesseract language list to pytesseract language
 def ocr_lang(lang_list):
     lang_str = ""
     lang_len = len(lang_list)
@@ -51,18 +72,27 @@ def ocr_lang(lang_list):
         return lang_str
 
 
-# ocr tesseract
+import pytesseract
+import os
+
+# Set Tesseract executable path in Colab virtal environment
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+
+# Set up the Tesseract data directory
+os.environ["TESSDATA_PREFIX"] = "/usr/share/tesseract-ocr/4.00/tessdata"
+
 def ocr_tesseract(img, languages):
-    ocr_str = pytesseract.image_to_string(img, lang=ocr_lang(languages))
+    custom_config = f'--oem 3 --psm 6 -l {ocr_lang(languages)}'
+    ocr_str = pytesseract.image_to_string(img, config=custom_config)
     return ocr_str
 
 
-# 清除
+# Clear content
 def clear_content():
     return None
 
 
-# 复制到剪贴板
+# copy to clipboard
 def cp_text(input_text):
     # sudo apt-get install xclip
     try:
@@ -105,21 +135,36 @@ def translate(input_text, inputs_transStyle):
     return translate_text[2:]
 
 
+# 在 https://platform.openai.com/signup 注册并获取 API 密钥
+openai.api_key = "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"
+
+def generate_summary(text_input):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+             {"role": "system", "content": "You are a helpful assistant."},
+             {"role": "user", "content": text_input}
+         ]
+     )
+    summary = response["choices"][0]["message"]["content"].strip()
+    return summary
+
+
 def main():
 
     with gr.Blocks(css='style.css') as ocr_tr:
         gr.Markdown(OCR_TR_DESCRIPTION)
 
         # -------------- OCR 文字提取 --------------
-        with gr.Box():
+        with gr.Column():
 
             with gr.Row():
-                gr.Markdown("### Step 01: Text Extraction")
+                gr.Markdown("### Step 01: 文本抽取")
 
             with gr.Row():
                 with gr.Column():
                     with gr.Row():
-                        inputs_img = gr.Image(image_mode="RGB", source="upload", type="pil", label="image")
+                        inputs_img = gr.Image(image_mode="RGB", type="pil", label="image")
                     with gr.Row():
                         inputs_lang = gr.CheckboxGroup(choices=["chi_sim", "eng"],
                                                        type="value",
@@ -127,20 +172,31 @@ def main():
                                                        label='language')
 
                     with gr.Row():
-                        clear_img_btn = gr.Button('Clear')
-                        ocr_btn = gr.Button(value='OCR Extraction', variant="primary")
+                        clear_img_btn = gr.Button('清除')
+                        ocr_btn = gr.Button(value='图片文本抽取', variant="primary")
 
                 with gr.Column():
                     with gr.Row():
-                        outputs_text = gr.Textbox(label="Extract content", lines=20)
+                        outputs_text = gr.Textbox(label="抽取的文本", lines=20)
                     with gr.Row():
                         inputs_transStyle = gr.Radio(choices=["zh-en", "en-zh"],
                                                      type="value",
                                                      value="zh-en",
-                                                     label='translation mode')
+                                                     label='翻译模式')
                     with gr.Row():
-                        clear_text_btn = gr.Button('Clear')
-                        translate_btn = gr.Button(value='Translate', variant="primary")
+                        clear_text_btn = gr.Button('清除')
+                        translate_btn = gr.Button(value='翻译', variant="primary")
+
+            # Add a text box to display the generated summary
+            with gr.Row():
+                  outputs_summary_text = gr.Textbox(label="生成的摘要", lines=20)
+            
+           
+            with gr.Row():
+                  with gr.Row():
+                       generate_summary_btn = gr.Button('生成摘要', variant="primary")
+                  with gr.Row():
+                       clear_summary_btn = gr.Button('清除摘要')
 
             with gr.Row():
                 example_list = [["./data/test.png", ["eng"]], ["./data/test02.png", ["eng"]],
@@ -148,33 +204,44 @@ def main():
                 gr.Examples(example_list, [inputs_img, inputs_lang], outputs_text, ocr_tesseract, cache_examples=False)
 
         # -------------- 翻译 --------------
-        with gr.Box():
+        with gr.Column():
 
             with gr.Row():
-                gr.Markdown("### Step 02: Translation")
+                gr.Markdown("### Step 02: 翻译")
 
             with gr.Row():
                 outputs_tr_text = gr.Textbox(label="Translate Content", lines=20)
 
             with gr.Row():
-                cp_clear_btn = gr.Button(value='Clear Clipboard')
-                cp_btn = gr.Button(value='Copy to clipboard', variant="primary")
+                cp_clear_btn = gr.Button(value='清除剪贴板')
+                cp_btn = gr.Button(value='复制到剪贴板', variant="primary")
 
         # ---------------------- OCR Tesseract ----------------------
         ocr_btn.click(fn=ocr_tesseract, inputs=[inputs_img, inputs_lang], outputs=[
             outputs_text,])
         clear_img_btn.click(fn=clear_content, inputs=[], outputs=[inputs_img])
 
-        # ---------------------- 翻译 ----------------------
+
+        # ---------------------- Summarization ----------------------
+        # To update the click event of the button, use generate_summary directly
+        generate_summary_btn.click(fn=generate_summary, inputs=[outputs_text],   
+                outputs=[outputs_summary_text])
+        clear_summary_btn.click(fn=clear_content, inputs=[], outputs=[outputs_summary_text])
+
+
+        # ---------------------- Translate ----------------------
         translate_btn.click(fn=translate, inputs=[outputs_text, inputs_transStyle], outputs=[outputs_tr_text])
         clear_text_btn.click(fn=clear_content, inputs=[], outputs=[outputs_text])
 
-        # ---------------------- 复制到剪贴板 ----------------------
+        # ---------------------- Copy to clipboard ----------------------
         cp_btn.click(fn=cp_text, inputs=[outputs_tr_text], outputs=[])
         cp_clear_btn.click(fn=cp_clear, inputs=[], outputs=[])
 
-    ocr_tr.launch(inbrowser=True)
+    ocr_tr.launch(inbrowser=True, share=True)
 
 
 if __name__ == '__main__':
     main()
+
+
+
