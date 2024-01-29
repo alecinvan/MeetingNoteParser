@@ -6,4 +6,4 @@ sentencepiece>=0.1.96
 transformers>=4.20.0
 sacremoses>=0.0.53
 torch>=1.11.0
-openai-0.28.0
+openai
