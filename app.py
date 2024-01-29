@@ -72,18 +72,23 @@ def ocr_lang(lang_list):
         return lang_str
 
 
-import pytesseract
-import os
+#import pytesseract
+
 
 # Set Tesseract executable path in Colab virtal environment
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+#pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
 # Set up the Tesseract data directory
-os.environ["TESSDATA_PREFIX"] = "/usr/share/tesseract-ocr/4.00/tessdata"
+#os.environ["TESSDATA_PREFIX"] = "/usr/share/tesseract-ocr/4.00/tessdata"
 
+#def ocr_tesseract(img, languages):
+#    custom_config = f'--oem 3 --psm 6 -l {ocr_lang(languages)}'
+#    ocr_str = pytesseract.image_to_string(img, config=custom_config)
+#    return ocr_str
+
+# ocr tesseract
 def ocr_tesseract(img, languages):
-    custom_config = f'--oem 3 --psm 6 -l {ocr_lang(languages)}'
-    ocr_str = pytesseract.image_to_string(img, config=custom_config)
+    ocr_str = pytesseract.image_to_string(img, lang=ocr_lang(languages))
     return ocr_str
 
 
