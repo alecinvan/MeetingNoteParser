@@ -2,6 +2,7 @@ This is an AI application to transcribe the text being input from webUI (Gradio)
 
 ||
 |title: Meeting Note Analyzer
+
 |emoji: 🚀
 |colorFrom: red
 |colorTo: red
