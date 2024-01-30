@@ -1,4 +1,5 @@
 This is an AI application to transcribe the text being input from webUI (Gradio), photo being taken, then summarize the context by GPT model with tuned assistant.
+
 ---
 title: Meeting note analyzer
 emoji: 🚀
