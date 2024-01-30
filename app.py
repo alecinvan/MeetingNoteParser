@@ -150,7 +150,7 @@ def generate_summary(text_input):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-             {"role": "system", "content": "You are a helpful assistant."},
+             {"role": "system", "content": "你是一个非常能干的办公助手. 请把会议记录再此总结成会议纪要，识别出不同的会议主题，并进行总结。 请识别出待办事项，并进行任务分配，并在最后总结出决策点给领导决策。"},
              {"role": "user", "content": text_input}
          ]
      )
