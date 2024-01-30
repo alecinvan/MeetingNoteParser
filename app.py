@@ -1,5 +1,5 @@
 # AI Meeting note parser
-# Author：Alec Li
+# Author：Dr. Alec Li
 # Date：2024-01-26
 # Location: Richmond Hospital Canada
 
