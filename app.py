@@ -143,6 +143,8 @@ def translate(input_text, inputs_transStyle):
 # 在 https://platform.openai.com/signup 注册并获取 API 密钥
 #openai.api_key = "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"
 
+openai.api_key = os.getenv('OPENAI_API_KEY')
+
 
 def generate_summary(text_input):
     response = openai.ChatCompletion.create(
