@@ -23,7 +23,7 @@ nltk.download('punkt')
 OCR_TR_DESCRIPTION = '''
 <div id="content_align">
   <span style="color:darkred;font-size:32px;font-weight:bold">  
-    模多多会议记录总结神器 
+    EPF壹平台-模多多会议记录总结神器 
   </span>
 </div>
 
@@ -150,7 +150,7 @@ def generate_summary(text_input):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-             {"role": "system", "content": "你是一个非常能干的办公助手. 请把会议记录再此总结成会议纪要，识别出不同的会议主题，并进行总结。 请识别出待办事项，并进行任务分配，并在最后总结出决策点给领导决策。"},
+             {"role": "system", "content": "你是一个非常能干的办公助手. 请把会议记录再此总结成会议纪要，根据时间线详细识别出不同的会议主题，并进行总结。 请识别出待办事项，并根据时间点进行任务分配，并在最后总结出决策点给领导决策。"},
              {"role": "user", "content": text_input}
          ]
      )
