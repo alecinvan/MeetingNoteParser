@@ -169,6 +169,17 @@ def main():
             with gr.Row():
                 gr.Markdown("### Step 01: 文本抽取")
 
+            # Add a text box for direct input of text
+            with gr.Row():
+                inputs_direct_text = gr.Textbox(label="直接输入文本", lines=5)
+
+            with gr.Row():
+                with gr.Row():
+                    # Button to generate summary from directly input text
+                    generate_direct_summary_btn = gr.Button('生成概要', variant="primary")
+                with gr.Row():
+                    clear_direct_summary_btn = gr.Button('清除概要')    
+
             with gr.Row():
                 with gr.Column():
                     with gr.Row():
@@ -229,9 +240,14 @@ def main():
             outputs_text,])
         clear_img_btn.click(fn=clear_content, inputs=[], outputs=[inputs_img])
 
+        # ---------------------- Direct Text Summarization ----------------------
+        generate_direct_summary_btn.click(fn=generate_summary, inputs=[inputs_direct_text],
+                                          outputs=[outputs_summary_text])
+        clear_direct_summary_btn.click(fn=clear_content, inputs=[], outputs=[inputs_direct_text, outputs_summary_text])
 
+        
         # ---------------------- Summarization ----------------------
-        # To update the click event of the button, use generate_summary directly
+        # To update the click event of the button, use generate_summary directly    
         generate_summary_btn.click(fn=generate_summary, inputs=[outputs_text],   
                 outputs=[outputs_summary_text])
         clear_summary_btn.click(fn=clear_content, inputs=[], outputs=[outputs_summary_text])
