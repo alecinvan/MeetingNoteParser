@@ -29,7 +29,7 @@ OCR_TR_DESCRIPTION = '''
 
 <div id="content_align">
   <span style="color:blue;font-size:16px;font-weight:bold">  
-  会议记录拍照 -> 转文字 -> 翻译 -> 提炼会议纪要 -> 识别待办事项 -> 分配任务
+  会议记录拍照/文本录入 -> 转文字 -> 翻译 -> 提炼会议纪要 -> 识别待办事项 -> 分配任务
 </div>
 
 <div id="content_align" style="margin-top: 10px;">
