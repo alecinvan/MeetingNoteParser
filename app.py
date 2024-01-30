@@ -167,11 +167,15 @@ def main():
         with gr.Column():
 
             with gr.Row():
-                gr.Markdown("### Step 01: 文本抽取")
+                gr.Markdown("### 第一步: 文本总结")
 
             # Add a text box for direct input of text
             with gr.Row():
-                inputs_direct_text = gr.Textbox(label="直接输入文本", lines=5)
+                inputs_direct_text = gr.Textbox(label="直接输入文本", lines=15)
+
+            # Text box to display the generated summary from direct input
+            with gr.Row():                
+                outputs_direct_summary_text = gr.Textbox(label="生成的概要", lines=15) 
 
             with gr.Row():
                 with gr.Row():
@@ -179,7 +183,11 @@ def main():
                     generate_direct_summary_btn = gr.Button('生成概要', variant="primary")
                 with gr.Row():
                     clear_direct_summary_btn = gr.Button('清除概要')    
+   
 
+            with gr.Row():
+                gr.Markdown("### 第二步: 文本抽取")
+                
             with gr.Row():
                 with gr.Column():
                     with gr.Row():
@@ -226,7 +234,7 @@ def main():
         with gr.Column():
 
             with gr.Row():
-                gr.Markdown("### Step 02: 翻译")
+                gr.Markdown("### 第三步: 翻译")
 
             with gr.Row():
                 outputs_tr_text = gr.Textbox(label="Translate Content", lines=20)
