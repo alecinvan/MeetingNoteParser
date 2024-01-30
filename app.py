@@ -171,11 +171,11 @@ def main():
 
             # Add a text box for direct input of text
             with gr.Row():
-                inputs_direct_text = gr.Textbox(label="直接输入文本", lines=15)
+                inputs_direct_text = gr.Textbox(label="直接输入文本", lines=10)
 
             # Text box to display the generated summary from direct input
             with gr.Row():                
-                outputs_direct_summary_text = gr.Textbox(label="生成的概要", lines=15) 
+                outputs_direct_summary_text = gr.Textbox(label="生成的概要", lines=10) 
 
             with gr.Row():
                 with gr.Row():
@@ -204,7 +204,7 @@ def main():
 
                 with gr.Column():
                     with gr.Row():
-                        outputs_text = gr.Textbox(label="抽取的文本", lines=20)
+                        outputs_text = gr.Textbox(label="抽取的文本", lines=10)
                     with gr.Row():
                         inputs_transStyle = gr.Radio(choices=["zh-en", "en-zh"],
                                                      type="value",
