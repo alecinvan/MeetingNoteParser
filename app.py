@@ -183,7 +183,7 @@ def main():
                     generate_direct_summary_btn = gr.Button('生成概要', variant="primary")
                 with gr.Row():
                     clear_direct_summary_btn = gr.Button('清除概要')    
-   
+
 
             with gr.Row():
                 gr.Markdown("### 第二步: 文本抽取")
@@ -250,10 +250,9 @@ def main():
 
         # ---------------------- Direct Text Summarization ----------------------
         generate_direct_summary_btn.click(fn=generate_summary, inputs=[inputs_direct_text],
-                                          outputs=[outputs_summary_text])
-        clear_direct_summary_btn.click(fn=clear_content, inputs=[], outputs=[inputs_direct_text, outputs_summary_text])
+                                          outputs=[outputs_direct_summary_text])
+        clear_direct_summary_btn.click(fn=clear_content, inputs=[], outputs=[inputs_direct_text, outputs_direct_summary_text])
 
-        
         # ---------------------- Summarization ----------------------
         # To update the click event of the button, use generate_summary directly    
         generate_summary_btn.click(fn=generate_summary, inputs=[outputs_text],   
